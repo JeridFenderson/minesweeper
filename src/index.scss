@@ -1,4 +1,12 @@
 :root {
+  /* CSS Variables for all the font colors and sizes. Try changing these! */
+  --header-background: rgb(115, 115, 115);
+  --header-text-color: rgb(0, 0, 0);
+  --header-font-size: 2rem;
+  --square-font-size: calc(8 * var(--header-font-size));
+  --square-text-color: #5661b3;
+  --square-background-color: rgb(195, 195, 195);
+
   font: 16px / 1 sans-serif;
 }
 
@@ -7,6 +15,137 @@ html {
 }
 
 body {
+  background-color: var(--header-text-color);
   margin: 0;
   min-height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+h1 {
+  /* center the header */
+  text-align: center;
+
+  /* Use a sans serif font with a little spacing and color */
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  letter-spacing: 0.4rem;
+  font-size: var(--header-font-size);
+  color: var(--header-text-color);
+
+  /* Remove margins and set a little padding */
+  margin: 0;
+  padding: var(--header-font-size);
+
+  /* Set a background color for the header */
+  background-color: var(--header-background);
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+section ul,
+section li {
+  /* Be gone margins! */
+  margin: 0;
+  padding: 0;
+
+  /* and list styles */
+  list-style: none;
+}
+
+section ul {
+  /* Make the height of the list equal to the height of the page MINUS the height taken by the header */
+  height: calc(100vh - 3 * var(--header-font-size));
+  width: calc(100vh - 3 * var(--header-font-size));
+
+  /* Display the list as a 3 column and three row grid */
+  display: grid;
+  grid-template: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr/ 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+
+  /* Add a little gap between to allow the background color through */
+  gap: 0.1rem;
+
+  /* Set the background color that will show through the gap */
+  background-color: var(--header-background);
+}
+
+section ul li {
+  /* Use a monospace font */
+  font-family: monospace;
+  font-size: var(--square-font-size);
+
+  /* Style the background color of the item */
+  background-color: var(--square-background-color);
+
+  /* Make the cursor a pointer by default */
+  cursor: pointer;
+
+  /* Center the text in the LI */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 1s font-size ease-in-out;
+}
+
+section ul li.taken {
+  cursor: not-allowed;
+}
+
+section ul li.small {
+  font-size: 4rem;
+}
+
+section ul li.not-allowed-click {
+  background-color: red;
+}
+
+aside {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 19rem;
+}
+
+h2 {
+  background-color: var(--header-background);
+  padding: 1em;
+}
+
+nav {
+  background-color: var(--header-background);
+  display: flex;
+  justify-content: left;
+}
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+nav ul button {
+  font-size: 1.7em;
+  background-color: var(--square-background-color);
+  color: var(--header-text-color);
+}
+
+nav ul li ul {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+
+nav ul li ul button {
+  font-size: small;
+  border-radius: 0;
+}
+
+nav li {
+  list-style-type: none;
 }
