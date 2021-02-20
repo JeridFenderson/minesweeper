@@ -43,9 +43,8 @@ export class App extends Component {
         }),
       }
     )
-    const board = await response.json()
     this.setState(boardSizer)
-    this.setState(board)
+    this.setState(await response.json())
   }
 
   handleLeftClick = async (rowIndex, columnIndex) => {
@@ -64,8 +63,7 @@ export class App extends Component {
         }),
       }
     )
-    const move = await response.json()
-    this.setState(move)
+    this.setState(await response.json())
   }
   handleRightClick = async (rowIndex, columnIndex) => {
     if (this.state.id === '') {
@@ -83,8 +81,7 @@ export class App extends Component {
         }),
       }
     )
-    const move = await response.json()
-    this.setState(move)
+    this.setState(await response.json())
   }
 
   changeShape = (cell, rowIndex, columnIndex) => {
