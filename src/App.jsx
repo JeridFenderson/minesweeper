@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 export class App extends Component {
   state = {
-    id: 'Start New',
+    id: '',
     board: [
       [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
       [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
@@ -48,30 +48,38 @@ export class App extends Component {
     this.setState(board)
   }
 
-  handleLeftClick = async (row, column) => {
+  handleLeftClick = async (rowIndex, columnIndex) => {
+    if (this.state.id === '') {
+      this.createNewGame(0)
+      return
+    }
     const response = await fetch(
       `https://minesweeper-api.herokuapp.com/games/${this.state.id}/check`,
       {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          row: row,
-          column: column,
+          row: rowIndex,
+          col: columnIndex,
         }),
       }
     )
     const move = await response.json()
     this.setState(move)
   }
-  handleRightClick = async (row, column) => {
+  handleRightClick = async (rowIndex, columnIndex) => {
+    if (this.state.id === '') {
+      this.createNewGame(0)
+      return
+    }
     const response = await fetch(
       `https://minesweeper-api.herokuapp.com/games/${this.state.id}/flag`,
       {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          row: row,
-          column: column,
+          row: rowIndex,
+          col: columnIndex,
         }),
       }
     )
@@ -79,18 +87,101 @@ export class App extends Component {
     this.setState(move)
   }
 
-  changeShape = cell => {
+  changeShape = (cell, rowIndex, columnIndex) => {
     switch (cell) {
-      case ' ':
-        return ' '
       case '*':
-        return '<i class="fas fa-bomb"></i>'
+        return (
+          <li
+            className="revealed"
+            key={columnIndex}
+            onClick={() => this.handleLeftClick(rowIndex, columnIndex)}
+            onContextMenu={event => {
+              event.preventDefault()
+              this.handleRightClick(rowIndex, columnIndex)
+              return false
+            }}
+          >
+            <i className="fas fa-bomb"></i>
+          </li>
+        )
       case 'F':
-        return 'F'
+        return (
+          <li
+            key={columnIndex}
+            onClick={() => this.handleLeftClick(rowIndex, columnIndex)}
+            onContextMenu={event => {
+              event.preventDefault()
+              this.handleRightClick(rowIndex, columnIndex)
+              return false
+            }}
+          >
+            <i className="far fa-flag"></i>
+          </li>
+        )
       case '@':
-        return
+        return (
+          <li
+            className="revealed"
+            key={columnIndex}
+            onClick={() => this.handleLeftClick(rowIndex, columnIndex)}
+            onContextMenu={event => {
+              event.preventDefault()
+              this.handleRightClick(rowIndex, columnIndex)
+              return false
+            }}
+          >
+            <i class="fas fa-flag"></i>
+          </li>
+        )
+      case '_':
+        return (
+          <li
+            className="revealed"
+            key={columnIndex}
+            onClick={() => this.handleLeftClick(rowIndex, columnIndex)}
+            onContextMenu={event => {
+              event.preventDefault()
+              this.handleRightClick(rowIndex, columnIndex)
+              return false
+            }}
+          ></li>
+        )
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+        return (
+          <li
+            className="revealed"
+            key={columnIndex}
+            onClick={() => this.handleLeftClick(rowIndex, columnIndex)}
+            onContextMenu={event => {
+              event.preventDefault()
+              this.handleRightClick(rowIndex, columnIndex)
+              return false
+            }}
+          >
+            {cell}
+          </li>
+        )
       default:
-        return cell
+        return (
+          <li
+            key={columnIndex}
+            onClick={() => this.handleLeftClick(rowIndex, columnIndex)}
+            onContextMenu={event => {
+              event.preventDefault()
+              this.handleRightClick(rowIndex, columnIndex)
+              return false
+            }}
+          >
+            {cell}
+          </li>
+        )
     }
   }
 
@@ -98,49 +189,21 @@ export class App extends Component {
     return (
       <div>
         <header>
-          <h1>
-            Minesweeper Game: {this.state.id} ({this.state.state})
-          </h1>
+          <h1>Minesweeper Game: {this.state.id}</h1>
         </header>
-        <main className={this.state.boardSize}>
+        <main>
           <section>
-            <ul>
+            <ul className={this.state.boardSize}>
               {this.state.board.map((row, rowIndex) =>
-                row.map((cell, columnIndex) => (
-                  <li
-                    key={columnIndex}
-                    onClick={() => this.handleLeftClick(rowIndex, columnIndex)}
-                    onContextMenu={event => {
-                      event.preventDefault()
-                      this.handleRightClick(rowIndex, columnIndex)
-                      return false
-                    }}
-                  >
-                    {this.changeShape(cell)}
-                  </li>
-                ))
+                row.map((cell, columnIndex) =>
+                  this.changeShape(cell, rowIndex, columnIndex)
+                )
               )}
             </ul>
           </section>
           <aside>
-            <h2>Some words</h2>
-            <ul>
-              <li>
-                <strong>Key</strong>
-              </li>
-              <li>
-                Left click to reveal a square, right click to place a flag
-              </li>
-              <li>" " - An unrevealed cell </li>
-              <li>"_" - An empty revealed cell</li>
-              <li>"F" - An unrevealed flagged cell</li>
-              <li>"*" - A cell with a bomb in it</li>
-              <li>"@" - A flagged cell with a bomb in it</li>
-              <li>
-                "1-8" - The number of neighboring cells that contain a mine.
-              </li>
-              <li>{this.state.mines} mines on the field</li>
-            </ul>
+            <h2>{this.state.state.toUpperCase()}</h2>
+            <h3>{this.state.mines} mines left</h3>
             <nav>
               <ul>
                 <li>
@@ -165,6 +228,24 @@ export class App extends Component {
                 </li>
               </ul>
             </nav>
+            <ul>
+              <li>
+                <strong>Key</strong>
+              </li>
+              <li>
+                Left click to reveal a square, right click to place a flag
+              </li>
+              <li>
+                An unrevealed cell is dark grey. A revealed cell is light grey
+              </li>
+              <li>
+                "1-8" is the number of neighboring cells that contain a mine
+              </li>
+              <li>
+                You place outlined flags. Black flags are one's that had a bomb
+                under them
+              </li>
+            </ul>
           </aside>
         </main>
       </div>

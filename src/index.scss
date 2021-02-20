@@ -4,8 +4,9 @@
   --header-text-color: rgb(0, 0, 0);
   --header-font-size: 2rem;
   --square-text-color: #5661b3;
-  --square-background-color: rgb(195, 195, 195);
-  --board-area: calc(100vh - 3 * var(--header-font-size));
+  --hidden-background-color: rgb(160, 160, 160);
+  --revealed-background-color: rgb(195, 195, 195);
+  --board-area-desktop: calc(100vh - 3 * var(--header-font-size));
 
   font: 16px / 1 sans-serif;
 }
@@ -15,36 +16,28 @@ html {
 }
 
 body {
-  background-color: var(--header-text-color);
   margin: 0;
   min-height: 100%;
+  background-color: var(--header-background);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 h1 {
-  /* center the header */
-  text-align: center;
-
-  /* Use a sans serif font with a little spacing and color */
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  letter-spacing: 0.4rem;
-  font-size: var(--header-font-size);
-  color: var(--header-text-color);
-
-  /* Remove margins and set a little padding */
   margin: 0;
   padding: var(--header-font-size);
-
-  /* Set a background color for the header */
   background-color: var(--header-background);
+  color: var(--header-text-color);
+  text-align: center;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: var(--header-font-size);
 }
 
 main {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 section ul,
@@ -53,67 +46,54 @@ section li {
   padding: 0;
   list-style: none;
 }
+
 section ul {
-  height: var(--board-area);
-  width: var(--board-area);
+  height: 100vw;
+  width: 100vw;
   background-color: var(--header-background);
+  display: grid;
+  gap: 0.1rem;
+}
+.small {
+  grid-template: repeat(8, 1fr) / repeat(8, 1fr);
 }
 
-section ul li {
-  background-color: var(--square-background-color);
+.medium {
+  grid-template: repeat(16, 1fr) / repeat(16, 1fr);
+}
+
+.large {
+  grid-template: repeat(24, 1fr) / repeat(24, 1fr);
+}
+
+section li {
+  background-color: var(--hidden-background-color);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 }
 
-.small {
-  section ul {
-    display: grid;
-    grid-template: repeat(8, 1fr) / repeat(8, 1fr);
-    gap: 0.1rem;
-  }
-  section ul li {
-    font-size: 1em;
-  }
-}
-.medium {
-  section ul {
-    display: grid;
-    grid-template: repeat(16, 1fr) / repeat(16, 1fr);
-    gap: 0.1rem;
-  }
-  section ul li {
-    font-size: 1em;
-  }
+.revealed {
+  background-color: var(--revealed-background-color);
 }
 
-.large {
-  section ul {
-    display: grid;
-    grid-template: repeat(24, 1fr) / repeat(24, 1fr);
-    gap: 0.1rem;
-  }
-  section ul li {
-    font-size: 1em;
-  }
+h2,
+h3,
+aside ul {
+  margin: 0;
+  padding: 1em;
+  background-color: var(--header-background);
 }
 
 aside {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 17rem;
+  justify-content: center;
 }
 
-h2,
-aside ul {
-  background-color: var(--header-background);
-  padding: 1em;
-}
-
-aside ul {
+aside ul,
+nav ul {
   list-style-type: none;
 }
 
@@ -135,14 +115,42 @@ nav ul {
 }
 
 nav ul button {
-  background-color: var(--square-background-color);
+  background-color: var(--hidden-background-color);
   color: var(--header-text-color);
-}
-
-nav li {
-  list-style-type: none;
 }
 
 input {
   width: 7em;
+}
+
+@media all and (min-width: 570px) {
+  section ul {
+    height: 70vw;
+    width: 70vw;
+  }
+}
+
+@media all and (min-width: 870px) {
+  body {
+    background-color: var(--header-text-color);
+  }
+
+  h1 {
+    letter-spacing: 0.4rem;
+  }
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  section ul {
+    height: var(--board-area-desktop);
+    width: var(--board-area-desktop);
+  }
+  aside {
+    width: 17em;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }
