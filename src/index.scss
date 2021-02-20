@@ -3,9 +3,9 @@
   --header-background: rgb(115, 115, 115);
   --header-text-color: rgb(0, 0, 0);
   --header-font-size: 2rem;
-  --square-font-size: calc(8 * var(--header-font-size));
   --square-text-color: #5661b3;
   --square-background-color: rgb(195, 195, 195);
+  --board-area: calc(100vh - 3 * var(--header-font-size));
 
   font: 16px / 1 sans-serif;
 }
@@ -44,63 +44,59 @@ h1 {
 main {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 section ul,
 section li {
-  /* Be gone margins! */
   margin: 0;
   padding: 0;
-
-  /* and list styles */
   list-style: none;
 }
-
 section ul {
-  /* Make the height of the list equal to the height of the page MINUS the height taken by the header */
-  height: calc(100vh - 3 * var(--header-font-size));
-  width: calc(100vh - 3 * var(--header-font-size));
-
-  /* Display the list as a 3 column and three row grid */
-  display: grid;
-  grid-template: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr/ 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-
-  /* Add a little gap between to allow the background color through */
-  gap: 0.1rem;
-
-  /* Set the background color that will show through the gap */
+  height: var(--board-area);
+  width: var(--board-area);
   background-color: var(--header-background);
 }
 
 section ul li {
-  /* Use a monospace font */
-  font-family: monospace;
-  font-size: var(--square-font-size);
-
-  /* Style the background color of the item */
   background-color: var(--square-background-color);
-
-  /* Make the cursor a pointer by default */
-  cursor: pointer;
-
-  /* Center the text in the LI */
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 1s font-size ease-in-out;
+  cursor: pointer;
 }
 
-section ul li.taken {
-  cursor: not-allowed;
+.small {
+  section ul {
+    display: grid;
+    grid-template: repeat(8, 1fr) / repeat(8, 1fr);
+    gap: 0.1rem;
+  }
+  section ul li {
+    font-size: 1em;
+  }
+}
+.medium {
+  section ul {
+    display: grid;
+    grid-template: repeat(16, 1fr) / repeat(16, 1fr);
+    gap: 0.1rem;
+  }
+  section ul li {
+    font-size: 1em;
+  }
 }
 
-section ul li.small {
-  font-size: 4rem;
-}
-
-section ul li.not-allowed-click {
-  background-color: red;
+.large {
+  section ul {
+    display: grid;
+    grid-template: repeat(24, 1fr) / repeat(24, 1fr);
+    gap: 0.1rem;
+  }
+  section ul li {
+    font-size: 1em;
+  }
 }
 
 aside {
@@ -108,44 +104,45 @@ aside {
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: space-between;
-  width: 19rem;
+  width: 17rem;
 }
 
-h2 {
+h2,
+aside ul {
   background-color: var(--header-background);
   padding: 1em;
+}
+
+aside ul {
+  list-style-type: none;
+}
+
+aside li {
+  padding: 0.2em;
+  border-bottom: 0.1em solid var(--header-text-color);
 }
 
 nav {
   background-color: var(--header-background);
   display: flex;
-  justify-content: left;
+  flex-direction: column;
 }
 nav ul {
   display: flex;
   flex-wrap: wrap;
-  flex-direction: column;
-  align-items: flex-end;
+  justify-content: left;
+  padding: 0;
 }
 
 nav ul button {
-  font-size: 1.7em;
   background-color: var(--square-background-color);
   color: var(--header-text-color);
 }
 
-nav ul li ul {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: center;
-}
-
-nav ul li ul button {
-  font-size: small;
-  border-radius: 0;
-}
-
 nav li {
   list-style-type: none;
+}
+
+input {
+  width: 7em;
 }
